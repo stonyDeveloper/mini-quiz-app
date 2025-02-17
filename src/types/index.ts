@@ -55,5 +55,5 @@ export interface QuizState {
 export type QuizAction =
   | { type: 'NEXT_QUESTION' }
   | { type: 'ANSWER_QUESTION'; payload: { questionId: string; answer: any } }
-  | { type: 'SHOW_FEEDBACK'; payload: { isCorrect: boolean } }
+  | { type: 'HIDE_FEEDBACK' }
   | { type: 'RESET_QUIZ' };

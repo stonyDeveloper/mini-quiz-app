@@ -56,13 +56,12 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         canContinue: isCorrect,
       };
     }
-      
-    case 'SHOW_FEEDBACK':
+    
+    case 'HIDE_FEEDBACK':
       return {
         ...state,
-        showFeedback: true,
-        isCorrect: action.payload.isCorrect,
-        canContinue: action.payload.isCorrect,
+        showFeedback: false,
+        isCorrect: null,
       };
       
     case 'RESET_QUIZ':

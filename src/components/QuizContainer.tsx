@@ -5,7 +5,7 @@ import QuizHeader from './QuizHeader';
 import MultipleChoice from './MultipleChoice';
 import DragAndDrop from './DragAndDrop';
 import { MultipleChoiceQuestion, DragAndDropQuestion } from '../types';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const QuizContainer: React.FC = () => {
   const {
@@ -27,6 +27,10 @@ const QuizContainer: React.FC = () => {
     dispatch({ type: 'NEXT_QUESTION' });
   };
   
+  const handleTryAgain = () => {
+    dispatch({ type: 'HIDE_FEEDBACK' });
+  };
+  
   const handleResetQuiz = () => {
     dispatch({ type: 'RESET_QUIZ' });
   };
@@ -40,6 +44,7 @@ const QuizContainer: React.FC = () => {
             onAnswer={handleAnswer}
             showFeedback={showFeedback}
             isCorrect={isCorrect}
+            onTryAgain={handleTryAgain}
           />
         );
       case 'drag-and-drop':
@@ -49,6 +54,7 @@ const QuizContainer: React.FC = () => {
             onAnswer={handleAnswer}
             showFeedback={showFeedback}
             isCorrect={isCorrect}
+            onTryAgain={handleTryAgain}
           />
         );
       default:
@@ -112,15 +118,17 @@ const QuizContainer: React.FC = () => {
         onBack={handleResetQuiz}
       />
       
-      <motion.div
-        key={currentQuestion.id}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        {renderQuestion()}
-      </motion.div>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentQuestion.id}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {renderQuestion()}
+        </motion.div>
+      </AnimatePresence>
       
       {canContinue && (
         <motion.div
@@ -132,7 +140,7 @@ const QuizContainer: React.FC = () => {
             onClick={handleNextQuestion}
             className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center"
           >
-            <span>Continue</span>
+            <span>{isLastQuestion ? 'Finish' : 'Continue'}</span>
             <svg
               className="ml-2 w-5 h-5"
               fill="none"
